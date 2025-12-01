@@ -2,9 +2,9 @@
 
   <div class="w-full border-2 rounded-lg flex items-center flex-col cursor-pointer"
        :class="!isException ? 'border-green-400 ':'border-red-400 '"
-       @click="changeShow" >
+        >
      <div class="w-full flex justify-between h-[50px] items-center rounded-lg px-[25px]"
-          :class="!isException ? 'bg-green-400 ':'bg-red-400'">
+          :class="!isException ? 'bg-green-400 ':'bg-red-400'" @click="changeShow">
        <h1 class="font-bold text-white text-[20px] "
        >{{detail.logType}}
        </h1>

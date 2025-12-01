@@ -1,25 +1,26 @@
 <template>
-  <div class="fixed p-6 mx-auto w-full max-h-screen">
-    <h1 class="text-2xl font-bold mb-4 ">JSON Formatter & Validator</h1>
-    <div class="flex-1 flex flex-col">
-      <h2 class="mb-2 font-bold text-xl">Input JSON</h2>
-      <textarea
-          v-model="input"
-          class="border w-full flex-1 min-h-[100px] p-3 rounded-lg font-mono "
-          placeholder="Nhập JSON..."
-          @input="formatJson"
-      ></textarea>
+  <div class="p-6 pt-[10px] mx-auto w-full overflow-hidden">
+    <div class="max-h-[10%]">
+      <h1 class="text-2xl font-bold mb-4 ">JSON Formatter & Validator</h1>
+      <div class="flex-1 flex flex-col">
+        <h2 class="mb-2 font-bold text-xl">Input JSON</h2>
+        <textarea
+            v-model="input"
+            class="border w-full flex-1 min-h-[150px] p-3 rounded-lg font-mono"
+            placeholder="Nhập JSON..."
+            @input="formatJson"
+        ></textarea>
+      </div>
     </div>
-    <div class="grid grid-cols-2 w-full  mt-[25px] gap-2">
-      <div class="w-full flex flex-col ">
-        <div class="max-h-[700px] border-1 rounded-lg">
+    <div class="flex flex-row w-full mt-[25px] max-h-[7 00px] space-x-[5%] overflow-hidden">
+<!--      left-->
+      <div class="w-[45%] flex flex-col h-full justify-between">
+        <div class="border-1 rounded-lg max-h-[700px] overflow-scroll">
           <JsonData :data="outputHtml"/>
         </div>
-
       </div>
-      <div class="flex flex-col h-full">
-        <div class="border-2 rounded-lg p-[20px]">
-
+      <div class="flex flex-col w-[50%] max-h-[700px] overflow-hidden">
+        <div class="border-2 rounded-lg p-[5px]">
           <div class="flex space-x-2 items-center">
             <h1 class="text-[20px] font-bold">RequestId: </h1>
             <p class="text-[18px]">{{ outputHtml?.requestId }}</p>
@@ -37,11 +38,14 @@
             <p class="text-[18px]">{{ outputHtml?.sessionId }}</p>
           </div>
         </div>
-        <h1 class="mb-2 font-bold text-xl mt-[10px]">Logs details</h1>
-        <div class="overflow-scroll h-[500px] flex-col space-y-3 py-[10px]">
-          <LogDetail v-for="log in logs" :detail="log"/>
+        <div class="flex flex-col overflow-scroll">
+          <h1 class="mb-2 font-bold text-xl mt-[10px]">Logs details</h1>
+          <div class="flex-col space-y-3 py-[10px">
+            <LogDetail v-for="log in logs" :detail="log"/>
+          </div>
         </div>
       </div>
+
     </div>
 
   </div>
@@ -52,7 +56,6 @@ import {ref} from 'vue'
 import {type ILogs, type ILog} from "./utils/Log.ts";
 import JsonData from "./components/JsonData.vue";
 import LogDetail from "./components/LogDetail.vue";
-import {} from "vue";
 
 const input = ref('')
 const error = ref('')
