@@ -10,7 +10,7 @@
        </h1>
        <button class="w-[40px] h-[40px] rounded-lg border-2 flex items-center justify-center border-white"
              >
-         <ChevronDownIcon class="w-10 h-10 text-white cursor-pointer" :class="!isShow ?'rotate-180' : ''"/>
+         <ChevronDownIcon class="w-10 h-10 text-white cursor-pointer transition-all duration-100" :class="!isShow ?'rotate-180' : ''"/>
        </button>
      </div>
       <div class="w-full  transition-all duration-100"

@@ -12,17 +12,14 @@
     </div>
     <div class="grid grid-cols-2 w-full  mt-[25px] gap-2">
       <div class="w-full flex flex-col ">
-        <div class="h-[800px] border-1 rounded-lg">
+        <div class="max-h-[700px] border-1 rounded-lg">
           <JsonData :data="outputHtml"/>
         </div>
 
       </div>
       <div class="flex flex-col h-full">
         <div class="border-2 rounded-lg p-[20px]">
-          <div class="flex space-x-2 items-center">
-            <h1 class="text-[20px] font-bold">SessionId: </h1>
-            <p class="text-[18px]">{{ outputHtml?.sessionId }}</p>
-          </div>
+
           <div class="flex space-x-2 items-center">
             <h1 class="text-[20px] font-bold">RequestId: </h1>
             <p class="text-[18px]">{{ outputHtml?.requestId }}</p>
@@ -35,9 +32,13 @@
             <h1 class="text-[20px] font-bold">CustomerId: </h1>
             <p class="text-[18px]">{{ outputHtml?.customerId }}</p>
           </div>
+          <div class="flex space-x-2 items-center">
+            <h1 class="text-[20px] font-bold">SessionId: </h1>
+            <p class="text-[18px]">{{ outputHtml?.sessionId }}</p>
+          </div>
         </div>
         <h1 class="mb-2 font-bold text-xl mt-[10px]">Logs details</h1>
-        <div class="overflow-scroll h-[600px] flex-col space-y-3 py-[10px]">
+        <div class="overflow-scroll h-[500px] flex-col space-y-3 py-[10px]">
           <LogDetail v-for="log in logs" :detail="log"/>
         </div>
       </div>
