@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed p-6 max-w-10xl mx-auto w-full">
+  <div class="fixed p-6 mx-auto w-full max-h-screen">
     <h1 class="text-2xl font-bold mb-4 ">JSON Formatter & Validator</h1>
     <div class="flex-1 flex flex-col">
       <h2 class="mb-2 font-bold text-xl">Input JSON</h2>
