@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import {ref, watch} from 'vue'
 import {type ILogs, type ILog, LogType} from "./utils/Log.ts"
 import JsonData from "./components/JsonData.vue"
 import LogDetail from "./components/LogDetail.vue"
@@ -68,6 +68,9 @@ const success = ref(false)
 const logs = ref<ILog[]>([])
 const outputHtml = ref<ILogs>()
 
+watch(()=>input.value, () => {
+  formatJson()
+})
 const formatJson = () => {
   try {
     outputHtml.value = JSON.parse(input.value) as ILogs
@@ -78,7 +81,15 @@ const formatJson = () => {
     error.value = e.message
     success.value = false
     logs.value = [] as ILog[]
-    outputHtml.value = e.message
+    try {
+      outputHtml.value = JSON.parse(input.value)
+    } catch (e:any){
+      error.value = e.message
+      success.value = false
+      logs.value = [] as ILog[]
+      outputHtml.value = e.message
+
+    }
   }
 }
 const sortData = (logs: ILog[]) => {
