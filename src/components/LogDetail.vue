@@ -13,9 +13,18 @@
          <ChevronDownIcon class="w-10 h-10 text-white cursor-pointer transition-all duration-100" :class="!isShow ?'rotate-180' : ''"/>
        </button>
      </div>
-      <div class="w-full  transition-all duration-100"
-           :class="!isShow ?'h-0 opacity-0':'h-[350px] opacity-100' "
+      <div class="w-full  transition-all duration-100 max-h-500"
+           :class="!isShow ?'h-0 opacity-0':' opacity-100' "
       >
+        <div class="w-full flex justify-end pr-[25px] pt-[10px]">
+          <button class="w-[40px] h-[40px] rounded-lg border-2 flex items-center justify-center border-black"
+            @click="copyJson"
+          >
+
+            <CheckIcon v-if="copied"  class="w-8 h-8 text-gray-800 cursor-pointer transition-all duration-100"/>
+            <DocumentDuplicateIcon v-else class="w-8 h-8 text-gray-800 cursor-pointer transition-all duration-100"/>
+          </button>
+        </div>
         <json-data :data="props.detail"/>
       </div>
   </div>
@@ -23,15 +32,16 @@
 
 <script setup lang="ts">
 import {type ILog, LogType} from "../utils/Log.ts";
-import {computed, ref, watch} from "vue";
+import {computed, ref} from "vue";
 import {syntaxHighlight} from "../utils/SyntaxHightLight.ts";
 import JsonData from "./JsonData.vue";
-import {ChevronDownIcon} from "@heroicons/vue/16/solid";
+import {ChevronDownIcon } from "@heroicons/vue/16/solid";
+import{DocumentDuplicateIcon, CheckIcon } from "@heroicons/vue/24/outline";
 
 export interface LogDetailProps {
   detail: ILog
 }
-
+const copied = ref<boolean>(false);
 const isException = computed(() =>
     props.detail?.logType === LogType.EXCEPTION
     || JSON.stringify(props.detail ?? {}).includes('exception')
@@ -43,13 +53,18 @@ const isShow = ref<boolean>(false)
 
 
 outputHtml.value = syntaxHighlight(JSON.stringify(props.detail, null, 2))
-// console.log(props.detail.logType, isException.value)
 
-watch(props.detail,()=>{
-  console.log("change!!")
-})
 const changeShow = () => {
   isShow.value = !isShow.value;
+}
+const copyJson = async () => {
+  try {
+    await navigator.clipboard.writeText(JSON.stringify(props.detail, null,2))
+    copied.value = true
+    setTimeout(() => copied.value = false, 1500)
+  } catch (err) {
+    console.error(err)
+  }
 }
 </script>
 

@@ -1,61 +1,66 @@
 <template>
-  <div class="p-6 pt-[10px] mx-auto w-full overflow-hidden">
-    <div class="max-h-[10%]">
-      <h1 class="text-2xl font-bold mb-4 ">JSON Formatter & Validator</h1>
-      <div class="flex-1 flex flex-col">
-        <h2 class="mb-2 font-bold text-xl">Input JSON</h2>
+  <div class="p-4 md:p-6 mx-auto w-full  bg-gray-100">
+    <h1 class="text-2xl md:text-3xl font-bold mb-4 text-center md:text-left">JSON Formatter & Validator</h1>
+    <h2 class="mb-2 font-bold text-xl text-gray-800">Input JSON</h2>
+    <div class="flex flex-row mb-6 w-full items-center">
+      <div class="w-[50%] h-full">
         <textarea
             v-model="input"
-            class="border w-full flex-1 min-h-[150px] p-3 rounded-lg font-mono"
+              class="border border-gray-300 w-full min-h-[150px] md:min-h-[150px] p-4 rounded-md font-mono resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
             placeholder="Nhập JSON..."
             @input="formatJson"
         ></textarea>
       </div>
+      <div class="w-[50%] h-[150px] border border-gray-200 rounded-lg p-4 shadow-sm bg-white mb-4 hover:shadow-md transition-shadow duration-200">
+        <div class="flex flex-col  md:space-x-6 space-y-2 md:space-y-0">
+          <div class="flex items-center space-x-2">
+            <h1 class="font-bold text-gray-800">RequestId:</h1>
+            <p class="text-gray-700">{{ outputHtml?.requestId }}</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <h1 class="font-bold text-gray-800">Username:</h1>
+            <p class="text-gray-700">{{ outputHtml?.username }}</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <h1 class="font-bold text-gray-800">CustomerId:</h1>
+            <p class="text-gray-700">{{ outputHtml?.customerId }}</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <h1 class="font-bold text-gray-800">SessionId:</h1>
+            <p class="text-gray-700">{{ outputHtml?.sessionId }}</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="flex flex-row w-full mt-[25px] max-h-[7 00px] space-x-[5%] overflow-hidden">
-<!--      left-->
-      <div class="w-[45%] flex flex-col h-full justify-between">
-        <div class="border-1 rounded-lg max-h-[700px] overflow-scroll">
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+      <div class="flex flex-col">
+        <div class="border border-gray-200 rounded-lg p-4 shadow-sm bg-white max-h-[850px] overflow-auto hover:shadow-md transition-shadow duration-200">
           <JsonData :data="outputHtml"/>
         </div>
       </div>
-      <div class="flex flex-col w-[50%] max-h-[700px] overflow-hidden">
-        <div class="border-2 rounded-lg p-[5px]">
-          <div class="flex space-x-2 items-center">
-            <h1 class="text-[20px] font-bold">RequestId: </h1>
-            <p class="text-[18px]">{{ outputHtml?.requestId }}</p>
-          </div>
-          <div class="flex space-x-2 items-center">
-            <h1 class="text-[20px] font-bold">Username: </h1>
-            <p class="text-[18px]">{{ outputHtml?.username }}</p>
-          </div>
-          <div class="flex space-x-2 items-center">
-            <h1 class="text-[20px] font-bold">CustomerId: </h1>
-            <p class="text-[18px]">{{ outputHtml?.customerId }}</p>
-          </div>
-          <div class="flex space-x-2 items-center">
-            <h1 class="text-[20px] font-bold">SessionId: </h1>
-            <p class="text-[18px]">{{ outputHtml?.sessionId }}</p>
-          </div>
-        </div>
-        <div class="flex flex-col overflow-scroll">
-          <h1 class="mb-2 font-bold text-xl mt-[10px]">Logs details</h1>
-          <div class="flex-col space-y-3 py-[10px">
-            <LogDetail v-for="log in logs" :detail="log"/>
+
+      <div class="flex flex-col w-full">
+
+
+        <div class="flex flex-col max-h-[850px] overflow-auto p-2 border border-gray-200 rounded-lg shadow-sm bg-white hover:shadow-md transition-shadow duration-200">
+          <h2 class="mb-2 font-bold text-xl text-gray-800">Logs details</h2>
+          <div class="flex flex-col space-y-3">
+            <LogDetail v-for="(log, index) in logs" :key="index" :detail="log"/>
           </div>
         </div>
       </div>
 
     </div>
-
   </div>
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue'
-import {type ILogs, type ILog} from "./utils/Log.ts";
-import JsonData from "./components/JsonData.vue";
-import LogDetail from "./components/LogDetail.vue";
+import { ref } from 'vue'
+import {type ILogs, type ILog, LogType} from "./utils/Log.ts"
+import JsonData from "./components/JsonData.vue"
+import LogDetail from "./components/LogDetail.vue"
 
 const input = ref('')
 const error = ref('')
@@ -66,7 +71,7 @@ const outputHtml = ref<ILogs>()
 const formatJson = () => {
   try {
     outputHtml.value = JSON.parse(input.value) as ILogs
-    logs.value = outputHtml.value.logs
+    logs.value = sortData(outputHtml.value.logs)
     error.value = ''
     success.value = true
   } catch (e: any) {
@@ -76,14 +81,14 @@ const formatJson = () => {
     outputHtml.value = e.message
   }
 }
-
+const sortData = (logs: ILog[]) => {
+  return logs.sort((log)=>  log.logType === LogType.EXCEPTION
+  || JSON.stringify(log ?? {}).includes('exception') ? -1 : 1)
+}
 </script>
 
 <style>
 body {
-  background: #f5f5f5;
   font-family: sans-serif;
 }
 </style>
-
-
