@@ -13,9 +13,10 @@
          <ChevronDownIcon class="w-10 h-10 text-white cursor-pointer transition-all duration-100" :class="!isShow ?'rotate-180' : ''"/>
        </button>
      </div>
-      <div class="w-full  transition-all duration-100 max-h-500"
-           :class="!isShow ?'h-0 opacity-0':' opacity-100' "
-      >
+    <div
+        class="flex flex-col w-full overflow-hidden transition-all duration-200"
+        :class="isShow ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'"
+    >
         <div class="w-full flex justify-end pr-[25px] pt-[10px]">
           <button class="w-[40px] h-[40px] rounded-lg border-2 flex items-center justify-center border-black"
             @click="copyJson"
