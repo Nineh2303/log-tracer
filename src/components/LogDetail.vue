@@ -5,9 +5,10 @@
         >
      <div class="w-full flex justify-between h-[50px] items-center rounded-lg px-[25px]"
           :class="!isException ? 'bg-green-400 ':'bg-red-400'" @click="changeShow">
-       <h1 class="font-bold text-white text-[20px] "
-       >{{detail.logType}}
-       </h1>
+      <div class=" flex items-center space-x-2">
+        <h1 class="font-bold text-white text-[20px] ">{{detail.logType}}</h1>
+        <h3 class="flex font-bold text-white text-[15px]"> Duration : <p> {{detail.stepTime}} ms</p></h3>
+      </div>
        <button class="w-[40px] h-[40px] rounded-lg border-2 flex items-center justify-center border-white"
              >
          <ChevronDownIcon class="w-10 h-10 text-white cursor-pointer transition-all duration-100" :class="!isShow ?'rotate-180' : ''"/>

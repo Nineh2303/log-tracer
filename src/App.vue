@@ -1,8 +1,8 @@
 <template>
-  <div class="p-4 md:p-6 mx-auto w-full  bg-gray-100">
-    <h1 class="text-2xl md:text-3xl font-bold mb-4 text-center md:text-left">JSON Formatter & Validator</h1>
+  <div class="p-4 md:p-6 mx-auto w-[75%] h-[90%]  bg-gray-100">
+    <h1 class="text-2xl md:text-3xl font-bold mb-4 text-center md:text-left">VNPAY log tracer</h1>
     <h2 class="mb-2 font-bold text-xl text-gray-800">Input JSON</h2>
-    <div class="flex flex-row mb-6 w-full items-center">
+    <div class="flex flex-row space-x-[20px] mb-6 w-full items-center">
       <div class="w-[50%] h-full">
         <textarea
             v-model="input"
@@ -29,6 +29,10 @@
             <h1 class="font-bold text-gray-800">SessionId:</h1>
             <p class="text-gray-700">{{ outputHtml?.sessionId }}</p>
           </div>
+          <div class="flex items-center space-x-2">
+            <h1 class="font-bold text-gray-800">processDuration</h1>
+            <p class="text-gray-700">{{ outputHtml?.processDuration }} ms</p>
+          </div>
         </div>
       </div>
     </div>
@@ -36,7 +40,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
       <div class="flex flex-col">
-        <div class="border border-gray-200 rounded-lg p-4 shadow-sm bg-white max-h-[850px] overflow-auto hover:shadow-md transition-shadow duration-200">
+        <div class="border border-gray-200 rounded-lg p-4 shadow-sm bg-white h-[850px] overflow-auto hover:shadow-md transition-shadow duration-200">
           <JsonData :data="outputHtml"/>
         </div>
       </div>
@@ -58,7 +62,7 @@
 
 <script setup lang="ts">
 import {ref, watch} from 'vue'
-import {type ILogs, type ILog, LogType} from "./utils/Log.ts"
+import {type ILogs, type ILog} from "./utils/Log.ts"
 import JsonData from "./components/JsonData.vue"
 import LogDetail from "./components/LogDetail.vue"
 
@@ -74,7 +78,7 @@ watch(()=>input.value, () => {
 const formatJson = () => {
   try {
     outputHtml.value = JSON.parse(input.value) as ILogs
-    logs.value = sortData(outputHtml.value.logs)
+    logs.value = outputHtml.value.logs
     error.value = ''
     success.value = true
   } catch (e: any) {
@@ -92,10 +96,7 @@ const formatJson = () => {
     }
   }
 }
-const sortData = (logs: ILog[]) => {
-  return logs.sort((log)=>  log.logType === LogType.EXCEPTION
-  || JSON.stringify(log ?? {}).includes('exception') ? -1 : 1)
-}
+
 </script>
 
 <style>

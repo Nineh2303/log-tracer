@@ -17,6 +17,8 @@ export interface ILog {
     logType: LogType,
     method: string,
     data: Object,
+    step: number,
+    stepTime: number
 }
 
 
