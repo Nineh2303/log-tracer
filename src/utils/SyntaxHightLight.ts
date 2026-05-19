@@ -16,14 +16,14 @@ export function syntaxHighlight(json: string): string {
 
             if (/^"/.test(match)) {
                 cls = /:$/.test(match)
-                    ? "text-[#A31515] font-semibold text-[20px]"  // key
-                    : "text-[#0451A5] text-[20px]";              // string
+                    ? "text-[#A31515]  text-[16px]"  // key
+                    : "text-[#0451A5]  text-[16px]";              // string
             } else if (/true|false/.test(match)) {
-                cls = "text-purple-500 font-bold text-[17px]";  // boolean
+                cls = "text-purple-500 font-bold text-[14px]";  // boolean
             } else if (/null/.test(match)) {
-                cls = "text-gray-500 italic text-[17px]";       // null
+                cls = "text-gray-500 italic text-[14px]";       // null
             } else {
-                cls = "text-orange-500 text-[17px]";           // number
+                cls = "text-orange-500 text-[14px]";           // number
             }
 
             return `<span class="${cls}">${match}</span>`;

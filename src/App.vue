@@ -1,54 +1,56 @@
 <template>
-  <div class="p-4 md:p-6 mx-auto w-[75%] h-[90%]  bg-gray-100">
-    <h1 class="text-2xl md:text-3xl font-bold mb-4 text-center md:text-left">VNPAY log tracer</h1>
-    <h2 class="mb-2 font-bold text-xl text-gray-800">Input JSON</h2>
-    <div class="flex flex-row space-x-[20px] mb-6 w-full items-center">
+  <div class="md:p-6 mx-auto overflow-hidden bg-gray-100  h-screen flex flex-col items-center">
+    <div class="w-full flex justify-center">
+      <h1 class="text-xl md:text-3xl font-bold text-center md:text-left">Log tracer</h1>
+    </div>
+    <div class="flex flex-row space-x-2 mb-2 items-start mt-2.5 h-[160px] w-full">
       <div class="w-[50%] h-full">
         <textarea
             v-model="input"
-              class="border border-gray-300 w-full min-h-[150px] md:min-h-[150px] p-4 rounded-md font-mono resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
+            class="border border-gray-300 bg-white w-full h-full min-h-[150px] md:min-h-[150px] p-4 rounded-md font-mono resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
             placeholder="Nhập JSON..."
             @input="formatJson"
         ></textarea>
       </div>
-      <div class="w-[50%] h-[150px] border border-gray-200 rounded-lg p-4 shadow-sm bg-white mb-4 hover:shadow-md transition-shadow duration-200">
+      <div
+          class="w-[50%] h-full border border-gray-200 rounded-lg p-4 shadow-sm bg-white mb-4 hover:shadow-md transition-shadow duration-200">
         <div class="flex flex-col  md:space-x-6 space-y-2 md:space-y-0">
-          <div class="flex items-center space-x-2">
-            <h1 class="font-bold text-gray-800">RequestId:</h1>
-            <p class="text-gray-700">{{ outputHtml?.requestId }}</p>
+          <div class="flex items-end space-x-2">
+            <h1 class="font-bold text-gray-800">Path:</h1>
+            <p class="text-gray-700 font-bold text-xl">{{ outputHtml?.path.split(':')[1] }}</p>
           </div>
-          <div class="flex items-center space-x-2">
+          <div class="flex items-end space-x-2">
             <h1 class="font-bold text-gray-800">Username:</h1>
-            <p class="text-gray-700">{{ outputHtml?.username }}</p>
+            <p class="text-gray-700 text-xl">{{ outputHtml?.username }}</p>
           </div>
-          <div class="flex items-center space-x-2">
-            <h1 class="font-bold text-gray-800">CustomerId:</h1>
-            <p class="text-gray-700">{{ outputHtml?.customerId }}</p>
+
+          <div class="flex items-end space-x-2">
+            <h1 class="font-bold text-gray-800">RequestId:</h1>
+            <p class="text-gray-700 text-xl">{{ outputHtml?.requestId }}</p>
           </div>
-          <div class="flex items-center space-x-2">
+          <div class="flex items-end space-x-2">
             <h1 class="font-bold text-gray-800">SessionId:</h1>
-            <p class="text-gray-700">{{ outputHtml?.sessionId }}</p>
+            <p class="text-gray-700 text-xl">{{ outputHtml?.sessionId }}</p>
           </div>
-          <div class="flex items-center space-x-2">
+          <div class="flex items-end space-x-2">
             <h1 class="font-bold text-gray-800">processDuration</h1>
-            <p class="text-gray-700">{{ outputHtml?.processDuration }} ms</p>
+            <p class="text-gray-700 text-xl">{{ outputHtml?.processDuration }} ms</p>
           </div>
         </div>
       </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
       <div class="flex flex-col">
-        <div class="border border-gray-200 rounded-lg p-4 shadow-sm bg-white h-[850px] overflow-auto hover:shadow-md transition-shadow duration-200">
+        <div
+            class="border border-gray-200 rounded-lg p-4 shadow-sm bg-white h-[700px] max-h-[700px] overflow-scroll hover:shadow-md transition-shadow duration-200">
           <JsonData :data="outputHtml"/>
         </div>
       </div>
 
       <div class="flex flex-col w-full">
-
-
-        <div class="flex flex-col max-h-[850px] overflow-auto p-2 border border-gray-200 rounded-lg shadow-sm bg-white hover:shadow-md transition-shadow duration-200">
+        <div
+            class="flex flex-col max-h-[700px] overflow-auto p-2 border border-gray-200 rounded-lg shadow-sm bg-white hover:shadow-md transition-shadow duration-200">
           <h2 class="mb-2 font-bold text-xl text-gray-800">Logs details</h2>
           <div class="flex flex-col space-y-3">
             <LogDetail v-for="(log, index) in logs" :key="index" :detail="log"/>
@@ -65,6 +67,7 @@ import {ref, watch} from 'vue'
 import {type ILogs, type ILog} from "./utils/Log.ts"
 import JsonData from "./components/JsonData.vue"
 import LogDetail from "./components/LogDetail.vue"
+import get = Reflect.get;
 
 const input = ref('')
 const error = ref('')
@@ -72,7 +75,7 @@ const success = ref(false)
 const logs = ref<ILog[]>([])
 const outputHtml = ref<ILogs>()
 
-watch(()=>input.value, () => {
+watch(() => input.value, () => {
   formatJson()
 })
 const formatJson = () => {
@@ -87,7 +90,7 @@ const formatJson = () => {
     logs.value = [] as ILog[]
     try {
       outputHtml.value = JSON.parse(input.value)
-    } catch (e:any){
+    } catch (e: any) {
       error.value = e.message
       success.value = false
       logs.value = [] as ILog[]
