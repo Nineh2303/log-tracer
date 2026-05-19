@@ -3,7 +3,7 @@
     <div class="w-full flex justify-center">
       <h1 class="text-xl md:text-3xl font-bold text-center md:text-left">Log tracer</h1>
     </div>
-    <div class="flex flex-row space-x-2 mb-2 items-start mt-2.5 h-[160px] w-full">
+    <div class="flex flex-row space-x-2 mb-2 items-start mt-2.5 h-40 w-full">
       <div class="w-[50%] h-full">
         <textarea
             v-model="input"
@@ -12,12 +12,12 @@
             @input="formatJson"
         ></textarea>
       </div>
-      <div
-          class="w-[50%] h-full border border-gray-200 rounded-lg p-4 shadow-sm bg-white mb-4 hover:shadow-md transition-shadow duration-200">
-        <div class="flex flex-col  md:space-x-6 space-y-2 md:space-y-0">
+      <div class="w-[50%] h-full border border-gray-200 rounded-lg p-4
+                  shadow-sm bg-white mb-4 hover:shadow-md transition-shadow duration-200">
+        <div class="flex flex-col md:space-x-6 space-y-2 md:space-y-0">
           <div class="flex items-end space-x-2">
             <h1 class="font-bold text-gray-800">Path:</h1>
-            <p class="text-gray-700 font-bold text-xl">{{ outputHtml?.path.split(':')[1] }}</p>
+            <p class="text-gray-700 font-bold text-xl">{{ outputHtml?.path?.split(':')[1] }}</p>
           </div>
           <div class="flex items-end space-x-2">
             <h1 class="font-bold text-gray-800">Username:</h1>
@@ -39,9 +39,8 @@
         </div>
       </div>
     </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div class="flex flex-col">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-full">
+      <div class="flex flex-col w-full">
         <div
             class="border border-gray-200 rounded-lg p-4 shadow-sm bg-white h-[700px] max-h-[700px] overflow-scroll hover:shadow-md transition-shadow duration-200">
           <JsonData :data="outputHtml"/>

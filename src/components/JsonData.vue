@@ -1,6 +1,6 @@
 <template>
   <pre
-      class="p-3 rounded-lg font-mono whitespace-pre-wrap text-sm h-full"
+      class="p-3 rounded-lg font-mono whitespace-pre-wrap text-sm h-full w-full"
       v-html="html"
   ></pre>
 </template>
