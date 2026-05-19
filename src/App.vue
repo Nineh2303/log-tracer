@@ -67,7 +67,6 @@ import {ref, watch} from 'vue'
 import {type ILogs, type ILog} from "./utils/Log.ts"
 import JsonData from "./components/JsonData.vue"
 import LogDetail from "./components/LogDetail.vue"
-import get = Reflect.get;
 
 const input = ref('')
 const error = ref('')
