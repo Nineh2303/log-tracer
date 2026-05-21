@@ -1,77 +1,126 @@
 <template>
-  <div class="md:p-6 mx-auto overflow-hidden bg-gray-100  h-screen flex flex-col items-center">
-    <div class="w-full flex justify-center items-center">
-      <h1 class="text-xl md:text-3xl font-bold text-center md:text-left">Log tracer</h1>
-    </div>
-    <div>
-      <div class=" w-full items-center justify-end space-x-2">
-        <div class="flex space-x-2 items-center justify-center pt-2 h-12.5">
-          <input v-model="logKey" @keydown.enter="getCache()" type="text" class="w-100 border-2 px-2 h-8 rounded-lg" >
-          <button @click="getCache()" class="rounded-lg border-2 h-10 px-4">Get log</button>
-        </div>
-      </div>
-    </div>
-    <div class="flex flex-row space-x-2 mb-2 items-start mt-2.5 h-40 w-full">
-      <div class="w-[50%] h-full">
-        <textarea
-            v-model="input"
-            class="border border-gray-300 bg-white w-full h-full min-h-37.5 md:min-h-37.5 p-4 rounded-md font-mono resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-            placeholder="Nhập JSON..."
-            @input="formatJson"
-        ></textarea>
-      </div>
-      <div class="w-[50%] h-full border border-gray-200 rounded-lg p-4
-                  shadow-sm bg-white mb-4 hover:shadow-md transition-shadow duration-200">
-        <div class="flex">
-          <div class="flex flex-col md:space-x-6 space-y-2 md:space-y-0 w-[70%]">
-            <div class="flex items-end space-x-2">
-              <h1 class="font-bold text-gray-800">Path:</h1>
-              <p class="text-gray-700 font-bold text-xl">{{ outputHtml?.path?.split(':')[1] }}</p>
-            </div>
-            <div class="flex items-end space-x-2">
-              <h1 class="font-bold text-gray-800">Username:</h1>
-              <p class="text-gray-700 text-xl">{{ outputHtml?.username }}</p>
-            </div>
+  <div class="h-screen overflow-hidden bg-gray-100">
 
-            <div class="flex items-end space-x-2">
-              <h1 class="font-bold text-gray-800">RequestId:</h1>
-              <p class="text-gray-700 text-xl">{{ outputHtml?.requestId }}</p>
-            </div>
-            <div class="flex items-end space-x-2">
-              <h1 class="font-bold text-gray-800">SessionId:</h1>
-              <p class="text-gray-700 text-xl">{{ outputHtml?.sessionId }}</p>
-            </div>
-            <div class="flex items-end space-x-2">
-              <h1 class="font-bold text-gray-800">processDuration</h1>
-              <p class="text-gray-700 text-xl">{{ outputHtml?.processDuration }} ms</p>
-            </div>
-          </div>
-          <div class="w-[30%] flex items-center space-x-2">
-            <button v-if="input.length!=0"
-                    class="rounded-lg border-2 h-20 px-4 cursor-pointer hover:bg-green-100"
-                    @click="writeCache()">Send log </button>
+    <!-- APP -->
+    <div class="h-full flex flex-col p-3 md:p-6">
+
+      <!-- HEADER -->
+      <div class="shrink-0">
+        <div class="flex justify-center items-center mb-4">
+          <h1 class="text-2xl md:text-4xl font-bold">
+            Log tracer
+          </h1>
+        </div>
+
+        <!-- SEARCH -->
+        <div class="w-full flex justify-center mb-4">
+          <div class="flex flex-col sm:flex-row w-full max-w-2xl gap-2">
+            <input
+                v-model="logKey"
+                @keydown.enter="getCache()"
+                type="text"
+                placeholder="Input log key..."
+                class="flex-1 border-2 px-3 h-11 rounded-lg bg-white"
+            />
+            <button
+                @click="getCache()"
+                class="h-11 px-5 rounded-lg border-2 bg-white hover:bg-green-100 cursor-pointer"
+            >
+              Get log
+            </button>
+
           </div>
         </div>
       </div>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-full">
-      <div class="flex flex-col w-full">
+
+      <!-- CONTENT -->
+      <div class="flex-1 overflow-hidden flex flex-col gap-4">
+
+        <!-- TOP -->
         <div
-            class="border border-gray-200 rounded-lg p-4 shadow-sm bg-white h-165 max-h-175 overflow-scroll hover:shadow-md transition-shadow duration-200">
-          <JsonData :data="outputHtml"/>
-        </div>
-      </div>
+            class="grid grid-cols-1 xl:grid-cols-2 gap-4
+                 shrink-0"
+        >
 
-      <div class="flex flex-col w-full">
-        <div
-            class="flex flex-col max-h-165 overflow-auto p-2 pb-5 border border-gray-200 rounded-lg shadow-sm bg-white hover:shadow-md transition-shadow duration-200">
-          <h2 class="mb-2 font-bold text-xl text-gray-800">Logs details</h2>
-          <div class="flex flex-col space-y-3">
-            <LogDetail v-for="(log, index) in logs" :key="index" :detail="log"/>
+          <!-- INPUT -->
+          <textarea
+              v-model="input"
+              @input="formatJson"
+              placeholder="Nhập JSON..."
+              class="w-full h-45 border border-gray-300
+                   bg-white p-4 rounded-lg font-mono
+                   resize-none"
+          ></textarea>
+
+          <div class="border border-gray-200 rounded-lg bg-white overflow-auto p-2 ">
+            <div class="flex space-x-2 items-center">
+              <span class="font-bold text-gray-800"> Path: </span>
+              <p class="text-lg  font-bold text-gray-700">{{ outputHtml?.path?.split(':')[1] }}</p>
+            </div>
+            <div class="flex space-x-2 items-center">
+              <span class="font-bold text-gray-800"> Username: </span>
+              <p class="text-lg text-gray-700">{{ outputHtml?.username }}</p>
+            </div>
+            <div class="flex space-x-2 items-center">
+
+              <span class="font-bold text-gray-800"> RequestId: </span>
+              <p class="text-lg text-gray-700">{{ outputHtml?.requestId }}</p>
+            </div>
+            <div class="flex space-x-2 items-center">
+
+              <span class="font-bold text-gray-800"> SessionId: </span>
+              <p class="text-lg text-gray-700">{{ outputHtml?.sessionId }}</p>
+            </div>
+            <div class="flex space-x-2 items-start justify-between">
+              <div class="flex space-x-2 items-center">
+                <span class="font-bold text-gray-800">  Process Duration: </span>
+                <p class="text-lg text-gray-700">{{ outputHtml?.processDuration }}</p>
+              </div>
+              <button
+                  @click="writeCache()"
+                  class="h-11 px-5 rounded-lg border-2 bg-white hover:bg-green-100 cursor-pointer"
+              >
+                Send log
+              </button>
+            </div>
+
           </div>
-        </div>
-      </div>
 
+
+
+        </div>
+
+        <!-- BOTTOM -->
+        <div
+            class="flex-1 overflow-hidden
+                 grid grid-cols-1 xl:grid-cols-2 gap-4"
+        >
+
+          <!-- JSON -->
+          <div
+              class="border border-gray-200 rounded-lg
+                   p-4 bg-white overflow-auto"
+          >
+            <JsonData :data="outputHtml" />
+          </div>
+
+          <!-- LOG -->
+          <div
+              class="border border-gray-200 rounded-lg
+                   p-4 bg-white overflow-auto"
+          >
+            <div class="space-y-3">
+              <LogDetail
+                  v-for="(log, index) in logs"
+                  :key="index"
+                  :detail="log"
+              />
+            </div>
+          </div>
+
+        </div>
+
+      </div>
     </div>
   </div>
 </template>
