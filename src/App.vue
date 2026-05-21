@@ -49,7 +49,7 @@
           <div class="w-[30%] flex items-center space-x-2">
             <button v-if="input.length!=0"
                     class="rounded-lg border-2 h-20 px-4 cursor-pointer hover:bg-green-100"
-                    @click="writeCache()">Send log for handsomeBoy Chinhnd1</button>
+                    @click="writeCache()">Send log </button>
           </div>
         </div>
       </div>
