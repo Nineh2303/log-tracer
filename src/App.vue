@@ -122,7 +122,7 @@ const formatJson = () => {
 const writeCache = async()=>{
   logKey.value = crypto.randomUUID()
   await redis.set(logKey.value, input.value, {
-    ex: 600
+    ex: 300
   })
 }
 
