@@ -76,12 +76,15 @@
                 <span class="font-bold text-gray-800">  Process Duration: </span>
                 <p class="text-lg text-gray-700">{{ outputHtml?.processDuration }}</p>
               </div>
-              <button
-                  @click="writeCache()"
-                  class="h-11 px-5 rounded-lg border-2 bg-white hover:bg-green-100 cursor-pointer"
-              >
-                Send log
-              </button>
+              <div class="flex flex-col items-start pr-5">
+                <button v-if="input.length !=0"
+                        @click="writeCache()"
+                        class="h-11 px-5 rounded-lg border-2 bg-white hover:bg-green-100 cursor-pointer"
+                >
+                  Send log and copy LogId
+                </button>
+                <h1 v-if="copied" class="text-red-500 font-bold">LogId copied!</h1>
+              </div>
             </div>
 
           </div>
@@ -140,6 +143,7 @@ const success = ref(false)
 const logs = ref<ILog[]>([])
 const outputHtml = ref<ILogs>()
 const logKey =  ref('')
+const copied = ref(false);
 
 watch(() => input.value, () => {
   formatJson()
@@ -169,10 +173,15 @@ const formatJson = () => {
 }
 
 const writeCache = async()=>{
-  logKey.value = crypto.randomUUID()
-  await redis.set(logKey.value, input.value, {
+  const key = crypto.randomUUID()
+  await redis.set(key, input.value, {
     ex: 300
   })
+  await navigator.clipboard.writeText(key)
+  copied.value = true
+  setTimeout(() => {
+    copied.value = false
+  }, 1500)
 }
 
 const getCache = async()=>{
