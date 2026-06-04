@@ -58,6 +58,10 @@
               <p class="text-lg  font-bold text-gray-700">{{ outputHtml?.path?.split(':')[1] }}</p>
             </div>
             <div class="flex space-x-2 items-center">
+              <span class="font-bold text-gray-800"> Exec Time: </span>
+              <p class="text-lg text-gray-700">{{timeFormat(logs[0]?.time) }}</p>
+            </div>
+            <div class="flex space-x-2 items-center">
               <span class="font-bold text-gray-800"> Username: </span>
               <p class="text-lg text-gray-700">{{ outputHtml?.username }}</p>
             </div>
@@ -67,7 +71,6 @@
               <p class="text-lg text-gray-700">{{ outputHtml?.requestId }}</p>
             </div>
             <div class="flex space-x-2 items-center">
-
               <span class="font-bold text-gray-800"> SessionId: </span>
               <p class="text-lg text-gray-700">{{ outputHtml?.sessionId }}</p>
             </div>
@@ -188,6 +191,11 @@ const getCache = async()=>{
   const data = await redis.get(logKey.value)
   console.log(data)
   input.value = JSON.stringify(data)
+}
+const timeFormat =(value:string)=>{
+  if (value) {
+    return value.replace(/\.\d+$/, "").replace("T", "   ")
+  }
 }
 
 </script>
