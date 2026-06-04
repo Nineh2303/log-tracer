@@ -192,7 +192,7 @@ const getCache = async()=>{
   console.log(data)
   input.value = JSON.stringify(data)
 }
-const timeFormat =(value:string)=>{
+const timeFormat =(value:string | undefined)=>{
   if (value) {
     return value.replace(/\.\d+$/, "").replace("T", "   ")
   }
