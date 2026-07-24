@@ -22,6 +22,12 @@
                 placeholder="Input log key..."
                 class="flex-1 border-2 px-3 h-11 rounded-lg bg-white"
             />
+            <input
+                v-model="keySaveLog"
+                type="text"
+                placeholder="Key Log to save"
+                class="flex-1 border-2 px-3 h-11 rounded-lg bg-white"
+            />
             <button
                 @click="getCache()"
                 class="h-11 px-5 rounded-lg border-2 bg-white hover:bg-green-100 cursor-pointer"
@@ -59,7 +65,7 @@
             </div>
             <div class="flex space-x-2 items-center">
               <span class="font-bold text-gray-800"> Exec Time: </span>
-              <p class="text-lg text-gray-700">{{timeFormat(logs[0]?.time) }}</p>
+              <p class="text-lg text-gray-700">{{ logs && timeFormat(logs[0]?.time) }}</p>
             </div>
             <div class="flex space-x-2 items-center">
               <span class="font-bold text-gray-800"> Username: </span>
@@ -79,12 +85,21 @@
                 <span class="font-bold text-gray-800">  Process Duration: </span>
                 <p class="text-lg text-gray-700">{{ outputHtml?.processDuration }}</p>
               </div>
-              <div class="flex flex-col items-start pr-5">
+              <div>
+
+              </div>
+              <div class="flex space-x-5 items-start pr-5">
                 <button v-if="input.length !=0"
                         @click="writeCache()"
                         class="h-11 px-5 rounded-lg border-2 bg-white hover:bg-green-100 cursor-pointer"
                 >
                   Send log and copy LogId
+                </button>
+                <button v-if="input.length !=0"
+                        @click="saveCache()"
+                        class="h-11 px-5 rounded-lg border-2 bg-white hover:bg-green-100 cursor-pointer"
+                >
+                  Save important Log
                 </button>
                 <h1 v-if="copied" class="text-red-500 font-bold">LogId copied!</h1>
               </div>
@@ -147,6 +162,7 @@ const logs = ref<ILog[]>([])
 const outputHtml = ref<ILogs>()
 const logKey =  ref('')
 const copied = ref(false);
+const keySaveLog = ref<string>('')
 
 watch(() => input.value, () => {
   formatJson()
@@ -179,6 +195,18 @@ const writeCache = async()=>{
   const key = crypto.randomUUID()
   await redis.set(key, input.value, {
     ex: 300
+  })
+  await navigator.clipboard.writeText(key)
+  copied.value = true
+  setTimeout(() => {
+    copied.value = false
+  }, 1500)
+}
+
+const saveCache = async()=>{
+  const key = keySaveLog.value ? keySaveLog.value :  crypto.randomUUID()
+  await redis.set(key, input.value, {
+    ex: 72000
   })
   await navigator.clipboard.writeText(key)
   copied.value = true
